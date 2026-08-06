@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "csv_reader.h"
+#include "order_book.h"
 
 int main()
 {
@@ -8,21 +9,17 @@ int main()
     {
         CSVReader reader("data/xnas-itch-20220610.mbo.csv");
 
+        OrderBook book;
         Message message;
-
-        int count = 0;
 
         while (reader.next(message))
         {
-            std::cout
-                << "Order ID: " << message.order_id
-                << "  Price: " << message.price
-                << "  Size: " << message.size
-                << '\n';
-
-            if (++count == 10)
-                break;
+            book.process(message);
         }
+
+        std::cout << "Active Orders: "
+                  << book.activeOrders()
+                  << '\n';
     }
     catch (const std::exception& e)
     {

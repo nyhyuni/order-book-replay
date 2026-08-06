@@ -10,4 +10,5 @@ include_directories(include)
 add_executable(order_book_replay
     src/main.cpp
     src/csv_reader.cpp
+    src/order_book.cpp
 )
