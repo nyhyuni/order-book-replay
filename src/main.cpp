@@ -3,11 +3,17 @@
 #include "csv_reader.h"
 #include "order_book.h"
 
-int main()
+int main(int argc, char* argv[])
 {
+    if (argc != 2)
+    {
+        std::cerr << "Usage: " << argv[0] << " <csv-file>\n";
+        return 1;
+    }
+
     try
     {
-        CSVReader reader("data/xnas-itch-20220610.mbo.csv");
+        CSVReader reader(argv[1]);
 
         OrderBook book;
         Message message;
@@ -15,11 +21,33 @@ int main()
         while (reader.next(message))
         {
             book.process(message);
-        }
 
-        std::cout << "Active Orders: "
-                  << book.activeOrders()
-                  << '\n';
+            const char* action = "Unknown";
+            switch (message.action)
+            {
+                case Action::Add:
+                    action = "Add";
+                    break;
+                case Action::Cancel:
+                    action = "Cancel";
+                    break;
+                case Action::Fill:
+                    action = "Fill";
+                    break;
+                case Action::Trade:
+                    action = "Trade";
+                    break;
+                default:
+                    break;
+            }
+
+            std::cout
+                << action
+                << " | Order ID: " << message.order_id
+                << " | Size: " << message.size
+                << " | Active Orders: " << book.activeOrders()
+                << '\n';
+        }
     }
     catch (const std::exception& e)
     {
