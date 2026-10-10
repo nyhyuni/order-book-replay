@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+#include <cstdint>
 #include <unordered_map>
 
 #include "message.h"
@@ -10,11 +12,12 @@ class OrderBook
 public:
     void process(const Message& message);
 
-    size_t activeOrders() const;
+    std::size_t activeOrders() const;
 
 private:
     void add(const Message& message);
     void cancel(const Message& message);
+    void fill(const Message& message);
 
-    std::unordered_map<uint64_t, Order> m_orders;
+    std::unordered_map<std::uint64_t, Order> m_orders;
 };

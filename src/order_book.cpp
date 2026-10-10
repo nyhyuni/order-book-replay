@@ -12,6 +12,10 @@ void OrderBook::process(const Message& message)
             cancel(message);
             break;
 
+        case Action::Fill:
+            fill(message);
+            break;
+
         default:
             break;
     }
@@ -31,17 +35,28 @@ void OrderBook::add(const Message& message)
 
 void OrderBook::cancel(const Message& message)
 {
+    m_orders.erase(message.order_id);
+}
+
+void OrderBook::fill(const Message& message)
+{
     auto it = m_orders.find(message.order_id);
 
     if (it == m_orders.end())
+        return;
+
+    Order& order = it->second;
+
+    if (message.size >= order.size)
     {
+        m_orders.erase(it);
         return;
     }
 
-    m_orders.erase(it);
+    order.size -= message.size;
 }
 
-size_t OrderBook::activeOrders() const
+std::size_t OrderBook::activeOrders() const
 {
     return m_orders.size();
 }
