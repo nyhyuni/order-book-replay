@@ -1,7 +1,6 @@
 #include <iostream>
 
-#include "csv_reader.h"
-#include "order_book.h"
+#include "replay.h"
 
 int main(int argc, char* argv[])
 {
@@ -13,41 +12,7 @@ int main(int argc, char* argv[])
 
     try
     {
-        CSVReader reader(argv[1]);
-
-        OrderBook book;
-        Message message;
-
-        while (reader.next(message))
-        {
-            book.process(message);
-
-            const char* action = "Unknown";
-            switch (message.action)
-            {
-                case Action::Add:
-                    action = "Add";
-                    break;
-                case Action::Cancel:
-                    action = "Cancel";
-                    break;
-                case Action::Fill:
-                    action = "Fill";
-                    break;
-                case Action::Trade:
-                    action = "Trade";
-                    break;
-                default:
-                    break;
-            }
-
-            std::cout
-                << action
-                << " | Order ID: " << message.order_id
-                << " | Size: " << message.size
-                << " | Active Orders: " << book.activeOrders()
-                << '\n';
-        }
+        replay(argv[1]);
     }
     catch (const std::exception& e)
     {
