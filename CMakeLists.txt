@@ -14,6 +14,7 @@ add_executable(order_book_replay
     src/csv_reader.cpp
     src/order_book.cpp
     src/replay.cpp
+    src/synthetic_feed.cpp
 )
 
 target_link_libraries(order_book_replay PRIVATE Threads::Threads)

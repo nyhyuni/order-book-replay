@@ -31,3 +31,13 @@ data/*.csv
 data/*.h5
 data/*.zst
 !data/.gitkeep
+
+# Local dashboard snapshots (may contain licensed market data)
+frontend/state.json
+frontend/state.json.tmp
+
+# Local resume documents and rendering scratch files
+main*.tex
+docs/resume-*.md
+docs/resume-*.txt
+tmp/

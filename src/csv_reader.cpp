@@ -47,6 +47,7 @@ bool CSVReader::next(Message& message)
     {
         return false;
     }
+    ++line_number_;
 
     std::stringstream ss(line);
     std::string field;
@@ -55,6 +56,14 @@ bool CSVReader::next(Message& message)
     while (std::getline(ss, field, ','))
     {
         fields.push_back(field);
+    }
+
+    if (fields.size() < 11)
+    {
+        throw std::runtime_error(
+            "CSV line " + std::to_string(line_number_) +
+            ": expected at least 11 columns, got " +
+            std::to_string(fields.size()));
     }
 
     message.ts_event = std::stoull(fields[1]);

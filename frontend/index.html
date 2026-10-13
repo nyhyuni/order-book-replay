@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Order Book Replay — Market depth</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header class="masthead">
+      <div class="identity"><span class="mark" aria-hidden="true">≋</span><div><h1>Order Book Replay</h1><p>Market depth · local session <span id="mode" class="mode">REPLAY</span></p></div></div>
+      <div class="connection"><span id="status-dot" class="dot"></span><span id="status" role="status">Waiting for replay</span></div>
+    </header>
+    <section class="overview" aria-label="Market summary">
+      <div><span class="label">Best bid</span><strong id="best-bid" class="bid">—</strong></div>
+      <div><span class="label">Spread</span><strong id="spread">—</strong></div>
+      <div><span class="label">Best ask</span><strong id="best-ask" class="ask">—</strong></div>
+      <div><span class="label">Active orders</span><strong id="active">0</strong></div>
+      <div><span class="label">Feed events / sec</span><strong id="rate">—</strong></div>
+    </section>
+    <div class="workspace">
+    <section class="book" aria-labelledby="depth-title">
+      <div class="toolbar"><div><h2 id="depth-title">Order book</h2><p>Price levels · best prices first</p></div><div class="controls"><label>Levels <select id="levels"><option value="10">10</option><option value="20">20</option><option value="50">50</option></select></label><button id="pause" type="button" aria-pressed="false">Pause view</button></div></div>
+      <div class="sides"><span class="bid">Buy side <small>BIDS</small></span><span class="ask">Sell side <small>ASKS</small></span></div>
+      <div class="table-scroll"><table aria-label="Bid and ask market depth"><thead><tr><th>Cumulative</th><th>Orders</th><th>Quantity</th><th class="bid">Bid price</th><th class="ask">Ask price</th><th>Quantity</th><th>Orders</th><th>Cumulative</th></tr></thead><tbody id="depth"></tbody></table></div>
+      <div id="empty" class="empty"><span aria-hidden="true">≋</span><h3>Waiting for the first snapshot</h3><p>Start a replay with snapshot output to see the book here.</p><code>./build/order_book_replay --demo --snapshot frontend/state.json</code></div>
+      <div class="depth-chart"><div class="chart-title"><span>Cumulative depth</span><span id="liquidity">—</span></div><svg id="chart" viewBox="0 0 760 150" role="img" aria-label="Cumulative bid and ask quantities by price"></svg></div>
+      <div class="book-footer"><span><span id="processed">0</span> events processed</span><span id="updated">No snapshot received</span></div>
+    </section>
+    <aside class="activity" aria-labelledby="activity-title"><div class="activity-title"><h2 id="activity-title">Feed activity</h2><span class="mode">EVENTS</span></div><p>Newest first · generated or recorded events</p><div class="activity-head"><span>Action / side</span><span>Price / size</span></div><ol id="tape"><li class="tape-empty">Waiting for events</li></ol></aside>
+    </div>
+    <section class="event-strip" aria-label="Latest observed event"><span class="label">Latest observed event</span><span id="event">—</span></section>
+    <footer><span><span id="source">Recorded events → reconstructed depth</span></span><span>Display refreshes every 250 ms · Pause view freezes the display only</span></footer>
+  </main>
+</body>
+</html>
